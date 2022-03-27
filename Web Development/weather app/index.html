@@ -9,21 +9,17 @@
 </head>
 <body>
     <h1>Weather Today</h1>
-    <p class="description">Search and press enter to get the weather info about specific city</p>
+    <p class="description">Search and press enter to get the current weather info about specific location</p>
     <form class="input">
-        <input name="input-city" type="text" placeholder="Search for city..">
+        <input name="city" type="text" placeholder="Search for city..">
     </form>
-    <div class="card">
+    <div class="card hidden">
         <img class="weather-img" src="" alt="">
         <div class="weather-details">
-            <h2>City Name</h2>
-            <img class="weather-icon" src="" alt="">
-            <p class="weather-condition">Weather Condition</p>
-            <h1 class="weather-temp">0 &deg;c</h1>
         </div>
     </div>
 
-    <script src="api.js"></script>
-    <script src="app.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/app.js"></script>
 </body>
 </html>

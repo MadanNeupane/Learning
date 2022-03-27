@@ -17,6 +17,11 @@ body{
     transition: 0.4s;
 }
 
+.description{
+    text-align: center;
+    margin: 0.5rem;
+}
+
 input{
     height: 3rem;
     outline: none;
@@ -60,4 +65,8 @@ input{
 
 .weather-icon{
     width: 3rem;
+}
+
+.hidden{
+    display: none;
 }
