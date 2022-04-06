@@ -43,34 +43,31 @@ input{
 .country-input{
     width: 180px;
 }
-
 .cards{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1.5rem;
     margin: 2rem;
 }
-
 .card{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    text-align: center;
     padding: 0.5rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 1rem;
     transition: 0.4s;
 }
-
 .card:hover{
     transform: scale(1.1);
 }
-
 .location{
     display: inline-flex;
     gap: 0.2rem;
 }
 .country-flag{
-    height: 1rem;
     align-self: center;
 }
 .btn{
@@ -86,4 +83,7 @@ input{
 .btn:hover{
     color: #F5F5F5;
     background-color: limegreen;
+}
+.hidden{
+    display: none;
 }
