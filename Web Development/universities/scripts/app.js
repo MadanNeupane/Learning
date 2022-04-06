@@ -8,7 +8,7 @@ const dataResults = document.querySelector('.data-results');
 const updateUI = (universities) => {
 
     cards.classList.remove('hidden');
-
+    cards.innerHTML = '';
     universities.forEach(university => {
         const uniName = university.name;
         const country = university.country;
@@ -27,26 +27,38 @@ const updateUI = (universities) => {
     });
 }
 
-uniSearch.addEventListener('keyup', () => {
-    let inputValue = uniSearch.value.trim().toLowerCase()
-    cards.innerHTML = '';
+// country.addEventListener('change', e => {
+//     let countryFilter = e.target.value.trim().toLowerCase();
+//     return countryFilter;
+// })
 
-    getUniversities(inputValue)
-    .then(data => {
-        if (data.length>0) {
-            updateUI(data.slice(0, 20));
-            if (data.length>20) {
+const searchUni = () => {
+    let inputValue = uniSearch.value.trim().toLowerCase();
+    let countryFilter = country.value.trim().toLowerCase();
+    let resultText = countryFilter ? ` in ${countryFilter}` : '';
+    if (inputValue != ''){
+        getUniversities({searchInput : inputValue, countryName: countryFilter})
+        .then(data => {
+            if (data.length>0) {
+                updateUI(data.slice(0, 20));
+                if (data.length>20) {
+                    dataResults.classList.remove('hidden');
+                    cards.dataResults = '';
+                    dataResults.innerHTML = `<p>${data.length} Results found for "<strong>${inputValue}</strong>"${resultText}. Showing first 20 results.</p>`;
+                }
+
+            } else {
                 dataResults.classList.remove('hidden');
-                dataResults.innerHTML = `<p>${data.length} Results found. Showing first 20 results.</p>`;
+                dataResults.innerHTML = `<p>No results found.</p>`;
+                cards.innerHTML = '';
             }
-
-        } else {
+        })
+        .catch(err => {
             dataResults.classList.remove('hidden');
-            dataResults.innerHTML = `<p>No Results found.</p>`;
-        }
-    })
-    .catch(err => {
-        dataResults.classList.remove('hidden');
-        dataResults.innerHTML = `<p>${err.message}</p>`;
-    });
-})
+            dataResults.innerHTML = `<p>${err.message}</p>`;
+        });
+    } else{
+        dataResults.classList.add('hidden');
+    }
+}
+
