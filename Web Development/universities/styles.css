@@ -84,6 +84,11 @@ input{
     color: #F5F5F5;
     background-color: limegreen;
 }
+.data-results{
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
 .hidden{
     display: none;
 }

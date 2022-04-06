@@ -11,6 +11,5 @@ const getUniversities = async (searchInput='', country='') =>{
     //     console.log(uniName, country, website, iso);
     // });
 
-    universities = data.slice(0, 20);
-    return universities;
+    return data;
 }

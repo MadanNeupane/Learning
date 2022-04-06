@@ -3,8 +3,12 @@ const form = document.querySelector('form');
 const uniSearch = form.universities;
 const country = form.country;
 const cards = document.querySelector('.cards');
+const dataResults = document.querySelector('.data-results');
 
 const updateUI = (universities) => {
+
+    cards.classList.remove('hidden');
+
     universities.forEach(university => {
         const uniName = university.name;
         const country = university.country;
@@ -24,18 +28,25 @@ const updateUI = (universities) => {
 }
 
 uniSearch.addEventListener('keyup', () => {
-    cards.classList.remove('hidden');
     let inputValue = uniSearch.value.trim().toLowerCase()
-    cards.innerHTML = ''
+    cards.innerHTML = '';
 
     getUniversities(inputValue)
     .then(data => {
         if (data.length>0) {
-            updateUI(data);
-            console.log(`${data.length} results found`)
+            updateUI(data.slice(0, 20));
+            if (data.length>20) {
+                dataResults.classList.remove('hidden');
+                dataResults.innerHTML = `<p>${data.length} Results found. Showing first 20 results.</p>`;
+            }
+
         } else {
-            console.log('No results found');
+            dataResults.classList.remove('hidden');
+            dataResults.innerHTML = `<p>No Results found.</p>`;
         }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        dataResults.classList.remove('hidden');
+        dataResults.innerHTML = `<p>${err.message}</p>`;
+    });
 })
