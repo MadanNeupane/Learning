@@ -4,24 +4,25 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
 from .serializers import ProductSerializer, CollectionSerializer
 from .models import Product, Collection
 
 
-@api_view(['GET', 'PUT'])
-def product_list(request):
-    if request.method == 'GET':
-        queryset = Product.objects.select_related('collection').all()
-        serializer = ProductSerializer(queryset, many=True)
+# @api_view(['GET', 'PUT'])
+# def product_list(request):
+#     if request.method == 'GET':
+#         queryset = Product.objects.select_related('collection').all()
+#         serializer = ProductSerializer(queryset, many=True)
 
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = ProductSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response(status=405)
+#         return Response(serializer.data)
+#     elif request.method == 'PUT':
+#         serializer = ProductSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+#     else:
+#         return Response(status=405)
 
 
 # @api_view(['GET', 'PUT', 'DELETE'])
@@ -44,6 +45,12 @@ def product_list(request):
 #     else:
 #         return Response(status=405)
 
-class ProductDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.get_queryset().select_related('collection')
+
+# class ProductDetail(RetrieveUpdateDestroyAPIView):
+#     queryset = Product.objects.get_queryset().select_related('collection')
+#     serializer_class = ProductSerializer
+
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.select_related('collection').all()
     serializer_class = ProductSerializer
