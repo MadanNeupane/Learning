@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
-from .serializers import ProductSerializer, CollectionSerializer
-from .models import Product, Collection
+from .serializers import ProductSerializer, CollectionSerializer, ItemSerializer
+from .models import Product, Collection, Item
 
 
 # @api_view(['GET', 'PUT'])
@@ -54,3 +54,10 @@ from .models import Product, Collection
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.select_related('collection').all()
     serializer_class = ProductSerializer
+
+
+class ItemViewSet(ModelViewSet):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        return Item.objects.filter(product_id=self.kwargs['product_pk'])

@@ -16,3 +16,9 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Item(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
+    quantity = models.IntegerField(null=True)
+    price = models.FloatField(null=True)

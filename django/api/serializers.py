@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Collection
+from .models import Product, Collection, Item
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -19,3 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return product.price * 0.9
 
 
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['id', 'product', 'quantity', 'price']
