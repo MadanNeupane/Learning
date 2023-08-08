@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import ProductSerializer, CollectionSerializer, ItemSerializer
 from .models import Product, Collection, Item
 
@@ -52,20 +54,17 @@ from .models import Product, Collection, Item
 
 
 class ProductViewSet(ModelViewSet):
-    # queryset = Product.objects.select_related('collection').all()
+    queryset = Product.objects.select_related('collection').all()
     serializer_class = ProductSerializer
-
-    def get_queryset(self):
-        queryset = Product.objects.select_related('collection').all()
-        collection = self.request.query_params.get('collection', None)
-        if collection is not None:
-            queryset = queryset.filter(collection__id=collection)
-        return queryset
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['collection']
+    search_fields = ['name', 'description']
 
 
 
 class ItemViewSet(ModelViewSet):
     serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['product']
+    search_fields = ['product__name', 'product__description']
 
-    def get_queryset(self):
-        return Item.objects.filter(product_id=self.kwargs['product_pk'])
