@@ -52,8 +52,16 @@ from .models import Product, Collection, Item
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.select_related('collection').all()
+    # queryset = Product.objects.select_related('collection').all()
     serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        queryset = Product.objects.select_related('collection').all()
+        collection = self.request.query_params.get('collection', None)
+        if collection is not None:
+            queryset = queryset.filter(collection__id=collection)
+        return queryset
+
 
 
 class ItemViewSet(ModelViewSet):
