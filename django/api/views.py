@@ -5,9 +5,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import ProductSerializer, CollectionSerializer, ItemSerializer
 from .models import Product, Collection, Item
-
+from .pagination import DefaultPagination
 
 # @api_view(['GET', 'PUT'])
 # def product_list(request):
@@ -54,10 +57,18 @@ from .models import Product, Collection, Item
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.select_related('collection').all()
     serializer_class = ProductSerializer
+    pagination_class = DefaultPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['collection']
+    search_fields = ['name', 'description']
+    ordering_fields = ['price', 'name']
+
 
 
 class ItemViewSet(ModelViewSet):
+    queryset = Item.objects.select_related('product').all()
     serializer_class = ItemSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['product']
+    search_fields = ['product__name', 'product__description']
 
-    def get_queryset(self):
-        return Item.objects.filter(product_id=self.kwargs['product_pk'])
