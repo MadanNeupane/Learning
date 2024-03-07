@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Universities Finder</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Universities Finder</h1>
+        <p class="description">Search and filter to find info about universities worldwide</p>
+        <form class="input">
+            <input onkeyup="searchUni()" class="universities-input" name="universities" type="text" placeholder="Search by university name..">
+            <input class="country-input" name="country" type="text" placeholder="Filter by country">
+        </form>
+        <div class="data-results hidden"></div>
+        <div class="cards hidden"></div>
+    </div>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
