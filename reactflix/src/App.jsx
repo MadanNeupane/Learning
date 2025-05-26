@@ -2,6 +2,7 @@ import MovieCard from './components/MovieCard';
 import Search from './components/Search';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
+import Spinner from './components/Spinner';
 
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
@@ -76,7 +77,7 @@ const App = () => {
         <section className="all-movies">
           <h2>{searchTerm ? `Results for "${searchTerm}"` : 'Popular Movies'}</h2>
           {isLoading ? (
-            <p className='text-white'>Loading...</p>
+            <Spinner />
           ) : errorMessage ? (
             <p className='text-red-500'>{errorMessage}</p>
           ) : (
