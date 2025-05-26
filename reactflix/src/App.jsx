@@ -26,8 +26,13 @@ const App = () => {
     setErrorMessage('');
 
     try {
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
-      const response = await fetch(`${endpoint}&query=${encodeURIComponent(query)}`, API_OPTIONS);
+      const endpoint = query
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&language=en-US&page=1`
+        : `${API_BASE_URL}/movie/popular?language=en-US&page=1`;
+      // If the query is empty, fetch popular movies
+      // Otherwise, fetch movies based on the search term
+
+      const response = await fetch(endpoint, API_OPTIONS);
       console.log(`Fetching movies for query: ${query}`);
 
       if (!response.ok) {
@@ -48,9 +53,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (searchTerm) {
-      fetchMovies(searchTerm);
-    }
+    fetchMovies(searchTerm);
   }, [searchTerm]);
 
   return (
@@ -65,7 +68,7 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
         <section className="all-movies">
-          <h2>All Movies</h2>
+          <h2>{searchTerm ? `Results for "${searchTerm}"` : 'Popular Movies'}</h2>
           {isLoading ? (
             <p className='text-white'>Loading...</p>
           ) : errorMessage ? (
