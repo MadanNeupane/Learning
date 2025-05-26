@@ -17,20 +17,32 @@ const App = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchMovies = async (query) => {
+    setIsLoading(true);
+    setErrorMessage('');
+
     try {
       const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       const response = await fetch(`${endpoint}&query=${encodeURIComponent(query)}`, API_OPTIONS);
       console.log(`Fetching movies for query: ${query}`);
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        setErrorMessage('Failed to fetch movies. Please try again later.');
       }
       const data = await response.json();
-      console.log(data.results);
+      if(data.Response === 'False') {
+        setErrorMessage(data.Error || 'Something went wrong.');
+        setMovies([]);
+        return;
+      }
+      setMovies(data.results || []);
     } catch (error) {
       console.error('Fetch error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,13 +65,25 @@ const App = () => {
         </header>
         <section className="all-movies">
           <h2>All Movies</h2>
-          <div className="movies">
-            {errorMessage && <p className="error">{errorMessage}</p>}
-            {!errorMessage && searchTerm && (
-              <p className="results">Showing results for "{searchTerm}"</p>
-            )}
-            {/* Movie cards will be rendered here */}
-          </div>
+          {isLoading ? (
+            <p className='text-white'>Loading...</p>
+          ) : errorMessage ? (
+            <p className='text-red-500'>{errorMessage}</p>
+          ) : (
+            <div className="movies">
+              {movies.length > 0 ? (
+                movies.map((movie) => (
+                  <div key={movie.id} className="movie">
+                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                    <h3>{movie.title}</h3>
+                    <p>{movie.release_date}</p>
+                  </div>
+                ))
+              ) : (
+                <p className='text-white'>No movies found.</p>
+              )}
+            </div>
+          )}
         </section>
       </div>
     </main>
