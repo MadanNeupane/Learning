@@ -1,3 +1,4 @@
+import MovieCard from './components/MovieCard';
 import Search from './components/Search';
 import { useEffect, useState } from 'react';
 
@@ -70,19 +71,11 @@ const App = () => {
           ) : errorMessage ? (
             <p className='text-red-500'>{errorMessage}</p>
           ) : (
-            <div className="movies">
-              {movies.length > 0 ? (
-                movies.map((movie) => (
-                  <div key={movie.id} className="movie">
-                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-                    <h3>{movie.title}</h3>
-                    <p>{movie.release_date}</p>
-                  </div>
-                ))
-              ) : (
-                <p className='text-white'>No movies found.</p>
-              )}
-            </div>
+            <ul>
+              { movies.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </ul>
           )}
         </section>
       </div>
